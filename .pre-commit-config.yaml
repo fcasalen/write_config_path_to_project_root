@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: check-requirements
+        name: Check if get_requirements was run
+        entry: cmd /c 'if not exist .requirements_generated (echo get_requirements não foi executado. Por favor, execute-o antes de comitar. && exit 1)'
+        language: system
+        pass_filenames: false
+      - id: pytest
+        name: Run pytest
+        entry: cmd /c 'pytest && del .requirements_generated'
+        language: system
+        types: [python]
+        pass_filenames: false
