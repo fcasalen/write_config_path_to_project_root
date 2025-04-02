@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='write_config_path_to_project_root',
-    version='0.1.0',
+    version='0.1.1',
     license="GNU General Public License",
     author="fcasalen",
     author_email="fcasalen@gmail.com",
