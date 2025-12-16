@@ -1,4 +1,0 @@
-cli_pprinter
-file_handler
-pytest
-setuptools

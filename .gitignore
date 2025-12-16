@@ -4,4 +4,5 @@
 */dist/
 */build/
 *.tar.gz
-.requirements_generated
+.coverage
+__pycache__

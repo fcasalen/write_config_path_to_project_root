@@ -1,0 +1,47 @@
+[build-system]
+requires = ["poetry-core>=2.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[project]
+name = "write_config_path_to_project_root"
+description = "write configuration path to a project root so it can be used by the project"
+license = "LICENSE"
+readme = "README.md"
+keywords = ["configuration", "path", "project root"]
+authors = [
+    { name = "Fernando Casale Neto", email = "fcasalen@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+requires-python = ">=3.11, <4.0"
+dynamic = ["version", "dependencies"]
+
+[tool.poetry]
+packages = [{include = "write_config_path_to_project_root", from = "src"}]
+version = "0.0.0"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+format = "{base}"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+detect = "^2012.12.3"
+pytest-cov = "^7.0.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
+
+[tool.ruff.lint]
+select = ["I", "F", "E", "W", "C", "N"]
+
+[tool.ruff.format]
+docstring-code-format = true
