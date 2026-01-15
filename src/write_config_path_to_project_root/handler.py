@@ -69,8 +69,8 @@ def load_json_config(file_path: str, config_class: Any = None):
         file_path (str): path to the json file
         config_class (Any): config class to load the json file. Defaults to None.
 
-    Returns:
-        config_class: returns the config class with the loaded json file
+    :return: config_class instance or dict or list
+    :rtype: dict | list | config_class
     """
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -80,7 +80,9 @@ def load_json_config(file_path: str, config_class: Any = None):
 
 
 def get_config(
-    project_root_path: str, project_config_path_locator: str = "config_path.txt"
+    project_root_path: str,
+    project_config_path_locator: str = "config_path.txt",
+    config_class: Any = None,
 ):
     """load config_path from project_config_path_locator, so the project can use
     this saved path without the need to implement a function in each project
@@ -91,25 +93,27 @@ def get_config(
         project_config_path_locator (str): txt file where the path to config_path
             will be saved. Defaults to config_path.txt
 
-    Returns:
-        str: returns the config_path saved in the project_config_file so it can be
-            used outside this method
+    return: config_class instance or dict or list
+    :rtype: dict | list | config_class
     """
     path = Path(project_root_path) / project_config_path_locator
     if not path.exists():
-        return set_new_config_path_to_project_root(
-            project_root_path=project_root_path,
-            project_config_path_locator=project_config_path_locator,
-        )
-    with open(path, "r", encoding="utf-8") as f:
-        file_path = Path(f.read().strip())
-    if not file_path.exists():
-        print(
-            f"Saved config_path ({str(file_path)}) not found! "
-            "You will be asked to pass a new one."
-        )
-        return set_new_config_path_to_project_root(
-            project_root_path=project_root_path,
-            project_config_path_locator=project_config_path_locator,
-        )
-    return load_json_config(str(file_path))
+        path.touch()
+    file_path = None
+    while file_path is None:
+        with open(path, "r", encoding="utf-8") as f:
+            file_path = f.read().strip()
+        if file_path in ["", ".", ".."] or not Path(file_path).exists():
+            print(
+                f"Saved config_path ({str(file_path)}) not found! "
+                "You will be asked to pass a new one."
+            )
+            set_new_config_path_to_project_root(
+                project_root_path=project_root_path,
+                project_config_path_locator=project_config_path_locator,
+            )
+            file_path = None
+    return load_json_config(
+        file_path=str(file_path),
+        config_class=config_class,
+    )

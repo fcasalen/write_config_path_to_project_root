@@ -89,13 +89,12 @@ class TestGetConfig:
         valid_project_root = tmp_path / "valid_project"
         valid_project_root.mkdir()
         valid_file_path = tmp_path / "valid_file_path.json"
-        valid_file_path.touch()
+        valid_file_path.write_text('{"data": "data"}', encoding="utf-8")
         with patch(
-            "src.write_config_path_to_project_root.handler.set_new_config_path_to_project_root",
-            return_value=str(valid_file_path),
+            "tkinter.filedialog.askopenfilename", return_value=str(valid_file_path)
         ):
             result = handler.get_config(str(valid_project_root), "config_path.txt")
-        assert result == str(valid_file_path)
+        assert result == {"data": "data"}
 
     def test_path_not_existing_anymore(self, tmp_path: Path):
         valid_project_root = tmp_path / "valid_project"
@@ -105,13 +104,12 @@ class TestGetConfig:
             str(tmp_path / "non_existing_path.json"), encoding="utf-8"
         )
         valid_file_path = tmp_path / "valid_file_path.json"
-        valid_file_path.touch()
+        valid_file_path.write_text('{"data": "data"}', encoding="utf-8")
         with patch(
-            "src.write_config_path_to_project_root.handler.set_new_config_path_to_project_root",
-            return_value=str(valid_file_path),
+            "tkinter.filedialog.askopenfilename", return_value=str(valid_file_path)
         ):
             result = handler.get_config(str(valid_project_root), "config_path.txt")
-        assert result == str(valid_file_path)
+        assert result == {"data": "data"}
 
     def test_path_exists(self, tmp_path: Path):
         valid_project_root = tmp_path / "valid_project"
